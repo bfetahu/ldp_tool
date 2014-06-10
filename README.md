@@ -33,7 +33,11 @@ and stores in a directory given by the user. In step (2) LDP extracts resource i
  into RDF or other formats. For RDF we provide the tool which exposes the profiles into RDF using the VoID and VoL schema.
 
 
-In order to run the LDP tool, it requires few variables to be added in its config file. We show here the possible input values for the different variables (where with "|" we show all acceptable and recognisable values by the tool), wheres for others we provide a simple textual description. See below for the sample config file. The defined variables and values should be stored in a separate file and should be given as an inline argument to the LDP tool, e.g. java -jar ldp.jar config.ini
+In order to run the LDP tool, it requires few variables to be added in its config file. We show here the possible input values for the different variables (where with "|" we show all acceptable and recognisable values by the tool), wheres for others we provide a simple textual description. See below for the sample config file. The defined variables and values should be stored in a separate file and should be given as an inline argument to the LDP tool, e.g. 
+
+```
+java -jar ldp.jar config.ini
+```
 
 ###Example config values
 =========================
@@ -200,4 +204,4 @@ ranking_iterations=10
 
 The code and the tool is provided under the creative commons licence (CC). When using the LDP tool please cite the paper in [1]. For additional information, refer to the website: http://data-observatory.org/lod-profiles/about.html.
 
-[1] Besnik Fetahu, Stefan Dietze, Bernardo Pereira Nunes, Marco Antonio Casanova, Davide Taibi, Wolfgang Nejdl: A Scalable Approach for Efficiently Generating Structured Dataset Topic Profiles. ESWC 2014: 519-534
+##[1] Besnik Fetahu, Stefan Dietze, Bernardo Pereira Nunes, Marco Antonio Casanova, Davide Taibi, Wolfgang Nejdl: A Scalable Approach for Efficiently Generating Structured Dataset Topic Profiles. ESWC 2014: 519-534##
