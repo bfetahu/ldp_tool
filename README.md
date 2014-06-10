@@ -22,10 +22,10 @@ and stores in a directory given by the user. In step (2) LDP extracts resource i
  (see [1]). Furthermore, the user can define what percentage of resources he/she wants to extract, i.e. 5,10,...,95% 
  of resources. In step (3) from the extracted resources, the tool performs the NED process by analysing the textual 
  literals of resources. Here, one can define what datatype properties are of interest for the NED process, which can 
- be fed in into the tool during the process. In this step, LDP extracts de.l3s.bfetahu.ldp.entities as 
- DBpedia de.l3s.bfetahu.ldp.entities, and the topics from the extracted de.l3s.bfetahu.ldp.entities through the 
+ be fed in into the tool during the process. In this step, LDP extracts entities as 
+ DBpedia entities, and the topics from the extracted entities through the 
  datatype property dcterms:subject. The last step of the LDP tool, is step (4) where from the extracted datasets 
- and their corresponding sampled resources, and the extracted de.l3s.bfetahu.ldp.entities and topics in step (3), 
+ and their corresponding sampled resources, and the extracted entities and topics in step (3), 
  we build the dataset topic graph as our profile. The topics are ranked for their relevance to the respective 
  datasets by different graphical models that can be fed into the LDP tool by the user, i.e. prank, kstep, hits, 
  for PageRank with Priors, K-Step Markov and HITS, respecitvely. Finally, after ranking the topics for their 
