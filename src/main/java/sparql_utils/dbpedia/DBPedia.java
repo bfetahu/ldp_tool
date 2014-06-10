@@ -8,8 +8,12 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Map.Entry;
 import java.util.Set;
+import java.util.logging.Logger;
 
 public class DBPedia {
+
+	private final static Logger LOGGER = Logger.getLogger(DBPedia.class.getName());
+
     /**
      * Extract the categories of an entity.
      *
@@ -30,7 +34,7 @@ public class DBPedia {
                 categories.add(qs.get("?category").toString());
             }
         } catch (Exception e) {
-            System.out.println(entity + "\t"+ e.getMessage());
+	        LOGGER.severe(entity + "\t"+ e.getMessage());
         }
 
         return categories;
@@ -62,7 +66,7 @@ public class DBPedia {
                 category_entities.add(new SimpleEntry<String, String>(qs.get("?entity").toString(), qs.get("?category").toString()));
             }
         } catch (Exception e) {
-            System.out.println(e.getMessage());
+	        LOGGER.severe(e.getMessage());
         }
         return category_entities;
     }

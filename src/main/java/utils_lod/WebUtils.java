@@ -10,16 +10,19 @@ import org.apache.commons.httpclient.methods.PostMethod;
 
 import java.util.List;
 import java.util.Map;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 
 public class WebUtils {
+	private final static Logger LOGGER = Logger.getLogger(WebUtils.class.getName());
     public static HttpClient client = new HttpClient();
     /*
      * Does the actual call of the Web Service, using a HttpClient which executes the GetMethod.
      */
     public static String request(String url) {
         Client client1 = Client.create();
-        System.out.println(url);
+        LOGGER.info(url);
         
         WebResource wbres = client1.resource(url);
         ClientResponse cr = wbres.accept("application/json").get(ClientResponse.class);
@@ -46,7 +49,7 @@ public class WebUtils {
 
             int response = client.executeMethod(method);
             if (response != HttpStatus.SC_OK) {
-                System.out.println("Method failed: " + method.getStatusText());
+                LOGGER.warning("Method failed: " + method.getStatusText());
             }
             // Read the response body.
             byte[] responseBody = method.getResponseBody();
@@ -54,12 +57,12 @@ public class WebUtils {
             // Deal with the response.
             // Use caution: ensure correct character encoding and is not binary data
             String response_str = new String(responseBody);
-            System.out.println(response_str);
+            LOGGER.info(response_str);
 
             return response_str;
         }
         catch(Exception e){
-            System.out.println(e.getMessage());
+            LOGGER.log(Level.SEVERE, e.getMessage(), e);
         }
         return "";
     }

@@ -8,12 +8,15 @@ import com.hp.hpl.jena.query.*;
 
 import java.util.Map;
 import java.util.TreeMap;
+import java.util.logging.Logger;
 
 /**
  *
  * @author besnik
  */
 public class DBpediaCatEnt {
+
+	private final static Logger LOGGER = Logger.getLogger(DBpediaCatEnt.class.getName());
 
     /**
      * Loads analytics about the a specific category, in this case it loads the
@@ -38,7 +41,7 @@ public class DBpediaCatEnt {
                 type_count.put(qs.get("?type").toString(), qs.get("?count_type").asLiteral().getInt());
             }
         } catch (Exception e) {
-            System.out.println(e.getMessage());
+	        LOGGER.severe(e.getMessage());
         }
         return type_count;
     }

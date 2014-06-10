@@ -9,11 +9,15 @@ import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 import java.util.TreeMap;
+import java.util.logging.Logger;
 
 /**
  * Created by besnik on 09/06/2014.
  */
 public class Baselines {
+
+	private final static Logger LOGGER = Logger.getLogger(Baselines.class.getName());
+
     public void generateBaselineTopicRankings(Map<String, String> props, Set<String> datasetnames) {
         String baseline_type = props.get("hasBaseline");
         String baselines_path = props.get("termspath");
@@ -22,7 +26,7 @@ public class Baselines {
         AccuracyComputation ac = new AccuracyComputation();
         if (baseline_type.equals("tfidf")) {
             for (String dataset : datasetnames) {
-                System.out.println("Generating baseline topic ranking for: " + baseline_type + " and for dataset " + dataset + " for " + 0 + " terms");
+	            LOGGER.info("Generating baseline topic ranking for: " + baseline_type + " and for dataset " + dataset + " for " + 0 + " terms");
                 String baseline_terms = baselines_path + dataset + "_tfidf.obj";
                 String baseline_annotations = baselines_path + dataset + "_tfidf_dpbedia_500.obj";
                 ac.generateBaselineRanking(baseline_type, baseline_terms, baseline_annotations, dataset, 0, baselines_output);
@@ -32,11 +36,11 @@ public class Baselines {
                 for (int k = 50; k <= 200; k += 50) {
                     for (String dataset : datasetnames) {
                         //semantic-web-dog-food_lda_dpbedia_40_200.obj
-                        System.out.println("Generating baseline topic ranking for: " + baseline_type + " and for dataset " + dataset + " for " + topics + " topics and for " + k + " terms");
+	                    LOGGER.info("Generating baseline topic ranking for: " + baseline_type + " and for dataset " + dataset + " for " + topics + " topics and for " + k + " terms");
                         String baseline_terms = baselines_path + dataset + "_lda_" + topics + "_" + k + ".obj";
                         String baseline_annotations = baselines_path + dataset + "_lda_dpbedia_" + topics + "_" + k + ".obj";
 
-                        System.out.println(baseline_annotations);
+	                    LOGGER.info(baseline_annotations);
                         ac.generateBaselineRanking(baseline_type, baseline_terms, baseline_annotations, dataset, k, baselines_output);
                     }
                 }

@@ -8,12 +8,15 @@ import com.hp.hpl.jena.query.*;
 
 import java.util.*;
 import java.util.Map.Entry;
+import java.util.logging.Logger;
 
 /**
  *
  * @author besnik
  */
 public class ProfileUtils {
+
+	private final static Logger LOGGER = Logger.getLogger(ProfileUtils.class.getName());
 
     /**
      * Gets the resources from property vol:derivedFrom from the links in the
@@ -37,7 +40,7 @@ public class ProfileUtils {
                 derived_resources.add(qs.get("?entity").toString());
             }
         } catch (Exception e) {
-            System.out.println(e.getMessage());
+	        LOGGER.severe(e.getMessage());
         }
         return derived_resources;
     }
@@ -45,7 +48,8 @@ public class ProfileUtils {
     /**
      * Get the dataset names from the profiles.
      *
-     * @param profile_url
+     * @param profile_endpoint
+     * @param graph_name
      * @return
      */
     public static Map<String, String> getDatasetProfileNames(String profile_endpoint, String graph_name) {
@@ -64,7 +68,7 @@ public class ProfileUtils {
                 dataset_names.put(qs.get("?linkset").toString(), qs.get("?dataset_name").toString());
             }
         } catch (Exception e) {
-            System.out.println(e.getMessage());
+            LOGGER.severe(e.getMessage());
         }
         return dataset_names;
     }
@@ -113,7 +117,7 @@ public class ProfileUtils {
                 linkset_data.put(link_uri, new AbstractMap.SimpleEntry<String, Double>(category_uri, score));
             }
         } catch (Exception e) {
-            System.out.println(e.getMessage());
+            LOGGER.severe(e.getMessage());
         }
 
         return linkset_data;
@@ -151,7 +155,7 @@ public class ProfileUtils {
                     sub_category_entities.add(entity_uri);
                 }
             } catch (Exception e) {
-                System.out.println(e.getMessage());
+	            LOGGER.severe(e.getMessage());
             }
         }
 

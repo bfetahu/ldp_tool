@@ -9,8 +9,12 @@ import org.apache.commons.lang.StringUtils;
 import utils_lod.FileUtils;
 
 import java.util.*;
+import java.util.logging.Logger;
 
 public class ExtractAnnotations {
+
+	private final static Logger LOGGER = Logger.getLogger(ExtractAnnotations.class.getName());
+
     private Map<String, String> props;
     private NERUtils ned;
 
@@ -64,7 +68,7 @@ public class ExtractAnnotations {
                     annotations.put(dbpobj.getAnnotationURI(), dbpobj);
                 }
             }
-            System.out.println("Annotating resource: " + resource.id + " finisehd");
+	        LOGGER.info("Annotating resource: " + resource.id + " finisehd");
         }
 
         FileUtils.saveObject(dataset, dataset_path);

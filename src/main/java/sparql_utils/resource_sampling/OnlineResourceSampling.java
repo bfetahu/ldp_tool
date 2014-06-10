@@ -8,11 +8,15 @@ import entities.linkeddata.Resource;
 import utils_lod.FileUtils;
 
 import java.util.*;
+import java.util.logging.Logger;
 
 /**
  * Created by besnik on 09/06/2014.
  */
 public class OnlineResourceSampling {
+
+	private final static Logger LOGGER = Logger.getLogger(OnlineResourceSampling.class.getName());
+
     private Map<String, String> props;
 
     public OnlineResourceSampling(Map<String, String> props) {
@@ -37,7 +41,7 @@ public class OnlineResourceSampling {
             }
 
         } catch (Exception e) {
-            e.printStackTrace();
+	        LOGGER.severe(e.getMessage());
         }
         return rst;
     }
@@ -63,7 +67,7 @@ public class OnlineResourceSampling {
                 }
             }
         } catch (Exception e) {
-            e.printStackTrace();
+	        LOGGER.severe(e.getMessage());
         }
         return rst;
     }
@@ -89,7 +93,7 @@ public class OnlineResourceSampling {
                 }
             }
         } catch (Exception e) {
-            e.printStackTrace();
+            LOGGER.severe(e.getMessage());
         }
         return rst;
     }
@@ -180,7 +184,7 @@ public class OnlineResourceSampling {
     public void indexDataset(Dataset dataset) {
         String sampling_type = props.get("sampling_type");
         int max_resource_no = getMaxResourceNumber(dataset);
-        System.out.println("Dataset " + dataset.name + " has " + max_resource_no + " resources.");
+	    LOGGER.info("Dataset " + dataset.name + " has " + max_resource_no + " resources.");
 
         Map<String, Integer> resource_datatypes = getResourceDataTypes(dataset, max_resource_no);
         String[] resources = new String[resource_datatypes.size()];
@@ -197,13 +201,13 @@ public class OnlineResourceSampling {
             sampled_resources = centralityDatasetIndexing(max_resource_no, resources, resource_types);
         }
 
-        System.out.println("Sampled resources: " + sampled_resources.size() + "\t" + sampled_resources.toString());
+	    LOGGER.info("Sampled resources: " + sampled_resources.size() + "\t" + sampled_resources.toString());
         //index all resources.
         sampled_resources.parallelStream().forEach(resource_uri -> addResourceToDataset(dataset, resource_uri));
 
         //store the updated dataset
         FileUtils.saveObject(dataset, props.get("datasetpath") + "/" + dataset.name);
-        System.out.println("Finished indexing dataset: " + dataset.name);
+	    LOGGER.info("Finished indexing dataset: " + dataset.name);
     }
 
     /**

@@ -22,6 +22,9 @@ import java.util.zip.GZIPInputStream;
 import java.util.zip.GZIPOutputStream;
 
 public class FileUtils {
+
+	private final static Logger LOGGER = Logger.getLogger(FileUtils.class.getName());
+
     /*
      * Gets the set of file names, from any directory structure recursively.
      */
@@ -67,7 +70,7 @@ public class FileUtils {
             writer.flush();
             writer.close();
         } catch (Exception e) {
-            e.printStackTrace();
+	        LOGGER.severe(e.getMessage());
         }
     }
 
@@ -81,7 +84,7 @@ public class FileUtils {
             writer.flush();
             writer.close();
         } catch (Exception e) {
-            e.printStackTrace();
+	        LOGGER.severe(e.getMessage());
         }
     }
 
@@ -95,7 +98,7 @@ public class FileUtils {
             writer.flush();
             writer.close();
         } catch (Exception e) {
-            e.printStackTrace();
+	        LOGGER.severe(e.getMessage());
         }
     }
 
@@ -109,7 +112,7 @@ public class FileUtils {
             out.flush();
             out.close();
         } catch (Exception e) {
-            e.printStackTrace();
+	        LOGGER.severe(e.getMessage());
         }
     }
 
@@ -133,7 +136,7 @@ public class FileUtils {
             gos.close();
             fos.close();
         } catch (IOException ioe) {
-            ioe.printStackTrace();
+	        LOGGER.severe(ioe.getMessage());
         }
     }
 
@@ -156,9 +159,9 @@ public class FileUtils {
             gis.close();
             fis.close();
         } catch (IOException ioe) {
-            ioe.printStackTrace();
+            LOGGER.severe(ioe.getMessage());
         } catch (ClassNotFoundException cnfe) {
-            cnfe.printStackTrace();
+            LOGGER.severe(cnfe.getMessage());
         }
         return obj;
     }
@@ -168,7 +171,7 @@ public class FileUtils {
         boolean rst = new File(path).exists();
 
         if (!rst && isDebug) {
-            System.out.println("File doesnt exist... [" + path + "]");
+	        LOGGER.info("File doesnt exist... [" + path + "]");
         }
 
         return rst;
@@ -182,7 +185,7 @@ public class FileUtils {
             File file = new File(path);
             return file.createNewFile();
         } catch (Exception e) {
-            System.out.println(e.getLocalizedMessage());
+	        LOGGER.severe(e.getMessage());
         }
         return false;
     }
@@ -200,7 +203,7 @@ public class FileUtils {
                 in.close();
                 return obj;
             } catch (Exception e) {
-                System.out.println(e.getCause().toString());
+	            LOGGER.severe(e.getCause().toString());
             }
         }
         return null;
@@ -254,7 +257,7 @@ public class FileUtils {
             reader.close();
             return sb.toString();
         } catch (Exception e) {
-            e.printStackTrace();
+	        LOGGER.severe(e.getMessage());
         }
         return "";
     }
@@ -275,7 +278,7 @@ public class FileUtils {
             reader.close();
             return sb.toString();
         } catch (Exception e) {
-            e.printStackTrace();
+            LOGGER.severe(e.getMessage());
         }
         return "";
     }
@@ -585,9 +588,9 @@ public class FileUtils {
             Entry<String, String> entry = new AbstractMap.SimpleEntry<String, String>(tmp[1], tmp[2]);
             rst.put(tmp[0], entry);
 
-            System.out.println(rst.size() + "\t" + line);
+	        LOGGER.info(rst.size() + "\t" + line);
         }
-        System.out.println(rst.size());
+	    LOGGER.info(rst.size() + "");
     }
 
 
@@ -690,7 +693,7 @@ public class FileUtils {
             }
 
         } catch (Exception e) {
-            e.printStackTrace();
+            LOGGER.severe(e.getMessage());
         }
     }
 
@@ -760,7 +763,7 @@ public class FileUtils {
             }
 
         } catch (Exception e) {
-            e.printStackTrace();
+            LOGGER.severe(e.getMessage());
         }
     }
 
@@ -885,7 +888,7 @@ public class FileUtils {
         //Now we remove the indices of the metadata, from the index datastructure of size k.
         indexK.removeAll(tmp);
 
-        System.out.println("For token: [" + tokenK + "] of size k[" + k + "] removing indexes from metadata: " + tmp);
+	    LOGGER.info("For token: [" + tokenK + "] of size k[" + k + "] removing indexes from metadata: " + tmp);
     }
 
     public static Set<String> loadSet(String path) {
@@ -958,11 +961,11 @@ public class FileUtils {
 
             return doc;
         } catch (ParserConfigurationException ex) {
-            Logger.getLogger(FileUtils.class.getName()).log(Level.SEVERE, null, ex);
+            LOGGER.log(Level.SEVERE, null, ex);
         } catch (SAXException ex) {
-            Logger.getLogger(FileUtils.class.getName()).log(Level.SEVERE, null, ex);
+	        LOGGER.log(Level.SEVERE, null, ex);
         } catch (IOException ex) {
-            Logger.getLogger(FileUtils.class.getName()).log(Level.SEVERE, null, ex);
+	        LOGGER.log(Level.SEVERE, null, ex);
         }
         return null;
     }
@@ -992,7 +995,7 @@ public class FileUtils {
 
             inChannel.close();
         } catch (Exception e) {
-            System.out.println(e.getMessage());
+            LOGGER.log(Level.SEVERE, null, e);
         }
     }
 }
