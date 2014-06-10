@@ -139,6 +139,10 @@ Define which NED process to use. Spotlight doesn't require any changes, while fo
 ned_operation=tagme|spotlight 
 ```
 
+In case the NED process is carried out by TagMe! NED tool, then you have to request an API KEY at http://tagme.di.unipi.it/ and provide the key as the value for the variable.
+```
+tagme_api_key=TagMe! API KEY
+```
 
 DBpedia sparql endpoints in different languages
 
