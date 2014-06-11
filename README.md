@@ -15,7 +15,7 @@ profiling tool are:
 
 The individual steps are explained in detail in [1], here we provide a brief overview of the output from each step. 
 In step (1) the input required from the tool is a dataset id, extracted from DataHub, i.e. lak-dataset 
-(http://datahub.io/dataset/lak-dataset) or a group id of datasets, i.e. lodcloud (http://datahub.io/organizations/lodcloud). 
+(http://datahub.io/dataset/lak-dataset) or a group id of datasets, i.e. lodcloud (http://datahub.io/organization/lodcloud). 
 As an output the LDP tool extracts the metadata from the datasets, such as the SPARQL endpoint, name, maintainer etc., 
 and stores in a directory given by the user. In step (2) LDP extracts resource instances from the given datasets in (1).
  It has the option to sample the extracted resources, based on three sampling strategies: random, weighted and centrality 
