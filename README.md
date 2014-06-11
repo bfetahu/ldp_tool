@@ -15,17 +15,17 @@ profiling tool are:
 
 The individual steps are explained in detail in [1], here we provide a brief overview of the output from each step. 
 In step (1) the input required from the tool is a dataset id, extracted from DataHub, i.e. lak-dataset 
-(http://datahub.io/dataset/lak-dataset) or a group id of datasets, i.e. lodcloud (http://datahub.io/organizations/lodcloud). 
+(http://datahub.io/dataset/lak-dataset) or a group id of datasets, i.e. lodcloud (http://datahub.io/organization/lodcloud). 
 As an output the LDP tool extracts the metadata from the datasets, such as the SPARQL endpoint, name, maintainer etc., 
 and stores in a directory given by the user. In step (2) LDP extracts resource instances from the given datasets in (1).
  It has the option to sample the extracted resources, based on three sampling strategies: random, weighted and centrality 
  (see [1]). Furthermore, the user can define what percentage of resources he/she wants to extract, i.e. 5,10,...,95% 
  of resources. In step (3) from the extracted resources, the tool performs the NED process by analysing the textual 
  literals of resources. Here, one can define what datatype properties are of interest for the NED process, which can 
- be fed in into the tool during the process. In this step, LDP extracts de.l3s.bfetahu.ldp.entities as 
- DBpedia de.l3s.bfetahu.ldp.entities, and the topics from the extracted de.l3s.bfetahu.ldp.entities through the 
+ be fed in into the tool during the process. In this step, LDP extracts entities as 
+ DBpedia entities, and the topics from the extracted entities through the 
  datatype property dcterms:subject. The last step of the LDP tool, is step (4) where from the extracted datasets 
- and their corresponding sampled resources, and the extracted de.l3s.bfetahu.ldp.entities and topics in step (3), 
+ and their corresponding sampled resources, and the extracted entities and topics in step (3), 
  we build the dataset topic graph as our profile. The topics are ranked for their relevance to the respective 
  datasets by different graphical models that can be fed into the LDP tool by the user, i.e. prank, kstep, hits, 
  for PageRank with Priors, K-Step Markov and HITS, respecitvely. Finally, after ranking the topics for their 
@@ -33,7 +33,11 @@ and stores in a directory given by the user. In step (2) LDP extracts resource i
  into RDF or other formats. For RDF we provide the tool which exposes the profiles into RDF using the VoID and VoL schema.
 
 
-In order to run the LDP tool, it requires few variables to be added in its config file. We show here the possible input values for the different variables (where with "|" we show all acceptable and recognisable values by the tool), wheres for others we provide a simple textual description. See below for the sample config file. The defined variables and values should be stored in a separate file and should be given as an inline argument to the LDP tool, e.g. java -jar ldp.jar config.ini
+In order to run the LDP tool, it requires few variables to be added in its config file. We show here the possible input values for the different variables (where with "|" we show all acceptable and recognisable values by the tool), wheres for others we provide a simple textual description. See below for the sample config file. The defined variables and values should be stored in a separate file and should be given as an inline argument to the LDP tool, e.g. 
+
+```
+java -jar ldp.jar config.ini
+```
 
 ###Example config values
 =========================
@@ -135,6 +139,10 @@ Define which NED process to use. Spotlight doesn't require any changes, while fo
 ned_operation=tagme|spotlight 
 ```
 
+In case the NED process is carried out by TagMe! NED tool, then you have to request an API KEY at http://tagme.di.unipi.it/ and provide the key as the value for the variable.
+```
+tagme_api_key=TagMe! API KEY
+```
 
 DBpedia sparql endpoints in different languages
 
@@ -200,4 +208,4 @@ ranking_iterations=10
 
 The code and the tool is provided under the creative commons licence (CC). When using the LDP tool please cite the paper in [1]. For additional information, refer to the website: http://data-observatory.org/lod-profiles/about.html.
 
-[1] Besnik Fetahu, Stefan Dietze, Bernardo Pereira Nunes, Marco Antonio Casanova, Davide Taibi, Wolfgang Nejdl: A Scalable Approach for Efficiently Generating Structured Dataset Topic Profiles. ESWC 2014: 519-534
+######[1] Besnik Fetahu, Stefan Dietze, Bernardo Pereira Nunes, Marco Antonio Casanova, Davide Taibi, Wolfgang Nejdl: A Scalable Approach for Efficiently Generating Structured Dataset Topic Profiles. ESWC 2014: 519-534######

@@ -9,7 +9,7 @@
     <version>1.0</version>
 
     <name>Linked Dataset Profiling</name>
-    <url>https://github.com/bfetahu/lod_profiles_app</url>
+    <url>https://github.com/bfetahu/ldp_tool</url>
 
     <properties>
         <jdk-version>1.8</jdk-version>
