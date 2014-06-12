@@ -10,11 +10,15 @@ import com.hp.hpl.jena.sparql.lib.org.json.JSONObject;
 import utils_lod.WebUtils;
 
 import java.util.*;
+import java.util.logging.Logger;
 
 /**
  * @author besnik
  */
 public class NERUtils {
+
+	private final static Logger LOGGER = Logger.getLogger(NERUtils.class.getClass().getName());
+
     private Map<String, String> props;
 
     public NERUtils(Map<String, String> props) {
@@ -67,11 +71,11 @@ public class NERUtils {
                     AbstractMap.SimpleEntry<String, Double> entry = new AbstractMap.SimpleEntry<String, Double>(entity.getString("@URI"), entity.getDouble("@similarityScore"));
                     map.put(entity.getString("@surfaceForm"), entry);
 
-                    System.out.println(entity.getString("@surfaceForm") + "\t" + entity.getString("@URI"));
+					LOGGER.info(entity.getString("@surfaceForm") + "\t" + entity.getString("@URI"));
                 }
             }
         } catch (Exception e) {
-            System.out.println(e.getMessage());
+	        LOGGER.severe(e.getMessage());
         }
 
         return map;
@@ -124,7 +128,7 @@ public class NERUtils {
                 }
             }
         } catch (Exception e) {
-            System.out.println(e.getMessage());
+	        LOGGER.severe(e.getMessage());
         }
 
         return map;
@@ -195,7 +199,7 @@ public class NERUtils {
             }
 
         } catch (Exception e) {
-            System.out.println(e.getMessage());
+	        LOGGER.severe(e.getMessage());
         }
 
         return ner_results;
@@ -255,7 +259,7 @@ public class NERUtils {
             }
 
         } catch (Exception e) {
-            System.out.println(e.getMessage());
+	        LOGGER.severe(e.getMessage());
         }
 
         return map;

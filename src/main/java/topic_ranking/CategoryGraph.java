@@ -18,6 +18,7 @@ import java.util.Collection;
 import java.util.Map;
 import java.util.Set;
 import java.util.TreeMap;
+import java.util.logging.Logger;
 
 /**
  * CategoryGraph - constructs the graph of all categories extracted from the
@@ -33,6 +34,7 @@ import java.util.TreeMap;
 public class CategoryGraph extends DirectedSparseGraph<String, String> implements Serializable {
 
     private static final long serialVersionUID = -4204251981433069308L;
+	private static final Logger LOGGER = Logger.getLogger(CategoryGraph.class.getName());
 
     /**
      * Generate the category graph
@@ -223,8 +225,8 @@ public class CategoryGraph extends DirectedSparseGraph<String, String> implement
         for (String topic : topics) {
             if(!topic.startsWith("http://dbpedia.org/resource/Category"))
                 continue;
-            
-            System.out.println("Assessing topic rankings with prior knowledge: " + topic);
+
+	        LOGGER.info("Assessing topic rankings with prior knowledge: " + topic);
             //capture the weights for the topic
             Map<String, Double> sub_weights = weights.get(topic);
             sub_weights = sub_weights == null ? new TreeMap<String, Double>() : sub_weights;
@@ -331,7 +333,7 @@ public class CategoryGraph extends DirectedSparseGraph<String, String> implement
         for (String topic : topics) {
             if(!topic.startsWith("http://dbpedia.org/resource/Category"))
                 continue;
-            System.out.println("Assessing topic rankings with prior knowledge: " + topic);
+	        LOGGER.info("Assessing topic rankings with prior knowledge: " + topic);
             
             Map<String, HITS.Scores> priors = new TreeMap<String, HITS.Scores>();
             //set the priors for the rest of vertices to zero.
@@ -383,8 +385,8 @@ public class CategoryGraph extends DirectedSparseGraph<String, String> implement
         for (String topic : topics) {
             if(!topic.startsWith("http://dbpedia.org/resource/Category"))
                 continue;
-            
-            System.out.println("Assessing topic rankings with prior knowledge: " + topic);
+
+	        LOGGER.info("Assessing topic rankings with prior knowledge: " + topic);
             
             //capture the weights for the topic
             Map<String, Double> sub_weights = weights.get(topic);
@@ -428,7 +430,7 @@ public class CategoryGraph extends DirectedSparseGraph<String, String> implement
         Collection<String> verticelist = getVertices();
 
         for (String dataset : datasets.keySet()) {
-            System.out.println("Processing for dataset: " + dataset);
+	        LOGGER.info("Processing for dataset: " + dataset);
             if(datasets.get(dataset).isEmpty()){
                 continue;
             }

@@ -12,13 +12,16 @@ import utils_lod.FileUtils;
 
 import java.util.*;
 import java.util.Map.Entry;
+import java.util.logging.Logger;
 
 /**
  *
  * @author besnik
  */
 public class NormalisationScore {
-    
+
+	private final static Logger LOGGER = Logger.getLogger(NormalisationScore.class.getName());
+
     /**
      * Compute normalised score using the following formula: score(t,D) =
      * #entities(D)/#entities(t,D) + #entities/#entities(t) It represents a
@@ -90,7 +93,7 @@ public class NormalisationScore {
                 continue;
             }
 
-            System.out.println("Processing dataset: " + dataset.name);
+	        LOGGER.info("Processing dataset: " + dataset.name);
 
             //store the set of entities associated with a dataset.
             Set<String> sub_dataset_entities = dataset_entities.get(dataset.name);

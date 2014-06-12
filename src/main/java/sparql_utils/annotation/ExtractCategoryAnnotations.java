@@ -6,17 +6,21 @@ import com.hp.hpl.jena.sparql.lib.org.json.JSONException;
 import com.hp.hpl.jena.sparql.lib.org.json.JSONObject;
 import entities.metadata.CategoryAnnotation;
 import entities.metadata.DBPediaAnnotation;
+import org.omg.PortableInterceptor.LOCATION_FORWARD;
 import utils_lod.WebUtils;
 
 import java.util.*;
+import java.util.logging.Logger;
 
 
 public class ExtractCategoryAnnotations {
 
+	private final static Logger LOGGER = Logger.getLogger(ExtractCategoryAnnotations.class.getName());
+
     public void appendCategories(Map<String, DBPediaAnnotation> dbpconcepts, String categoryannotationurl, long timeout) {
         for (String dbpconcepturi : dbpconcepts.keySet()) {
             DBPediaAnnotation dbpa = dbpconcepts.get(dbpconcepturi);
-            System.out.println("Assigning categories for entity... " + dbpa.getAnnotationURI());
+	        LOGGER.info("Assigning categories for entity... " + dbpa.getAnnotationURI());
 
             //check if it is annotated previously
             if (dbpa.category.categoryname != null) {
@@ -44,7 +48,7 @@ public class ExtractCategoryAnnotations {
             generateCategoryTree(cat, jsobj, level);
             return cat;
         } catch (Exception e) {
-            System.out.println(e.getMessage());
+	        LOGGER.severe(e.getMessage());
         }
         return null;
     }
@@ -342,7 +346,7 @@ public class ExtractCategoryAnnotations {
             qExe.close();
             return catant;
         } catch (Exception e) {
-            System.out.println(e.getMessage());
+	        LOGGER.severe(e.getMessage());
         }
         return null;
     }
@@ -378,7 +382,7 @@ public class ExtractCategoryAnnotations {
 
             return lst_first_level_categories;
         } catch (Exception e) {
-            System.out.println(e.getMessage());
+	        LOGGER.severe(e.getMessage());
         }
         return null;
     }

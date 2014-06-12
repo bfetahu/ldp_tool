@@ -17,8 +17,12 @@ import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
+import java.util.logging.Logger;
 
 public class EndpointUtils {
+
+	private final static Logger LOGGER = Logger.getLogger(EndpointUtils.class.getName());
+
     /*
      * Search string for the datasets within the group of linkededucation.
      */
@@ -49,11 +53,11 @@ public class EndpointUtils {
             JSONObject jsobj = new JSONObject(responsestr).getJSONObject("result");
             JSONArray jsarr = jsobj.getJSONArray("packages");
 
-            System.out.println(jsarr.toString());
+	        LOGGER.info(jsarr.toString());
 
             for (int i = 0; i < jsarr.length(); i++) {
                 JSONObject jsondataset = jsarr.getJSONObject(i);
-                System.out.println(jsondataset.toString());
+	            LOGGER.info(jsondataset.toString());
 
                 Dataset ds = new Dataset();
                 ds.id = jsondataset.getString("id");
@@ -75,12 +79,12 @@ public class EndpointUtils {
                 loadDatasetInformation(ds, ds.name);
                 lst.add(ds);
 
-                System.out.println(i + "\t" + ds.name + " loaded");
+	            LOGGER.info(i + "\t" + ds.name + " loaded");
             }
             return lst;
         } catch (Exception e) {
             if (isLogging) {
-                System.out.println("Method[loadGroupDatasetInformation]\nError occurred: " + e.getMessage());
+                LOGGER.severe("Method[loadGroupDatasetInformation]\nError occurred: " + e.getMessage());
                 FileUtils.saveText(e.getLocalizedMessage(), logpath, true);
             }
         }
@@ -105,7 +109,7 @@ public class EndpointUtils {
             HttpResponse response = httpclient.execute(post);
             String responsestr = getResponseText(response);
 
-            System.out.println(responsestr);
+	        LOGGER.info(responsestr);
 
             JSONObject jsondataset = new JSONObject(responsestr).getJSONObject("result");
 
@@ -117,7 +121,7 @@ public class EndpointUtils {
 
             return ds;
         } catch (Exception e) {
-            System.out.println("Method[packageSearch]\nError occurred: " + e.getMessage());
+	        LOGGER.severe("Method[packageSearch]\nError occurred: " + e.getMessage());
             FileUtils.saveText(e.getLocalizedMessage(), "ResourceUtilsLogging.txt", true);
         }
         return null;
@@ -141,7 +145,7 @@ public class EndpointUtils {
             HttpResponse response = httpclient.execute(post);
             String responsestr = getResponseText(response);
 
-            System.out.println(responsestr);
+	        LOGGER.info(responsestr);
 
             JSONObject jsobj = new JSONObject(responsestr).getJSONObject("result");
             JSONArray jsarr = jsobj.getJSONArray("results");
@@ -170,7 +174,7 @@ public class EndpointUtils {
             return lst;
         } catch (Exception e) {
             if (isLogging) {
-                System.out.println("Method[packageSearch]\nError occurred: " + e.getMessage());
+	            LOGGER.severe("Method[packageSearch]\nError occurred: " + e.getMessage());
                 FileUtils.saveText(e.getLocalizedMessage(), logpath, true);
             }
         }

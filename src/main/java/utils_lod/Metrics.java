@@ -4,6 +4,9 @@
  */
 package utils_lod;
 
+import java.util.logging.Level;
+import java.util.logging.Logger;
+
 /**
  *
  * @author besnik
@@ -41,6 +44,6 @@ public class Metrics {
     public static void printDistance(String s1, String s2) {
         int overlap = computeDistance(s1, s2);
         double score = overlap / (double)(s1.length() + s2.length());
-        System.out.println(s1 + "-->" + s2 + ": " + computeDistance(s1, s2) + "\t" + score);
+	    Logger.getLogger(Metrics.class.getName()).log(Level.INFO, null, s1 + "-->" + s2 + ": " + computeDistance(s1, s2) + "\t" + score);
     }
 }

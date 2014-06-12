@@ -14,11 +14,15 @@ import utils_lod.FileUtils;
 
 import java.util.*;
 import java.util.Map.Entry;
+import java.util.logging.Logger;
 
 /**
  * @author besnik
  */
 public class DatasetAnnotationGraphUtils {
+
+	private final static Logger LOGGER = Logger.getLogger(DatasetAnnotationGraphUtils.class.getName());
+
     private Map<String, String> props;
 
     public DatasetAnnotationGraphUtils(Map<String, String> props) {
@@ -51,7 +55,7 @@ public class DatasetAnnotationGraphUtils {
         CategoryGraph cg = new CategoryGraph();
         cg.addDataGraph(datasetgraph);
 
-        System.out.println(" Vertices: " + cg.getVertexCount() + "\t Edges: " + cg.getEdgeCount());
+	    LOGGER.info(" Vertices: " + cg.getVertexCount() + "\t Edges: " + cg.getEdgeCount());
         FileUtils.saveObject(cg, props.get("dataset_topic_graph"));
     }
 
@@ -94,7 +98,7 @@ public class DatasetAnnotationGraphUtils {
                 String timestr = "";
                 StringBuilder sb = new StringBuilder();
 
-                System.out.println("[Profiles]: PageRank with priors for " + props.get("sample_size") + "% of resources.");
+	            LOGGER.info("[Profiles]: PageRank with priors for " + props.get("sample_size") + "% of resources.");
                 //compute global ranking
                 if (!FileUtils.fileExists(props.get("topic_ranking_objects") + "Global_Ranking_" + ranking_type + "_" + props.get("sampling_type") + "_" + props.get("sample_size") + ".obj", false)) {
                     Map<String, Map<String, Double>> global_weights = cg.computeDatasetPageRankWithPriors(dataset_resources, alpha, ranking_iterations);
@@ -106,9 +110,9 @@ public class DatasetAnnotationGraphUtils {
                 }
 
                 sb = new StringBuilder();
-                System.out.println("[Topics]: PageRank with priors for " + props.get("sample_size") + "% of resources.");
+	            LOGGER.info("[Topics]: PageRank with priors for " + props.get("sample_size") + "% of resources.");
             } else if (ranking_type.equals("hits")) {
-                System.out.println("[Dataset]: HITS with priors for " + props.get("sample_size") + "% of resources.");
+	            LOGGER.info("[Dataset]: HITS with priors for " + props.get("sample_size") + "% of resources.");
                 //compute global ranking
                 long time = System.nanoTime();
                 String timestr = "";
@@ -124,9 +128,9 @@ public class DatasetAnnotationGraphUtils {
                 }
 
                 sb = new StringBuilder();
-                System.out.println("[Topics]: HITS with priors for " + props.get("sample_size") + "% of resources.");
+	            LOGGER.info("[Topics]: HITS with priors for " + props.get("sample_size") + "% of resources.");
             } else if (ranking_type.equals("kstep")) {
-                System.out.println("[Dataset]: K-Step Markov with priors for " + props.get("sample_size") + "% of resources.");
+                LOGGER.info("[Dataset]: K-Step Markov with priors for " + props.get("sample_size") + "% of resources.");
                 //compute global ranking
                 long time = System.nanoTime();
                 String timestr = "";
@@ -142,7 +146,7 @@ public class DatasetAnnotationGraphUtils {
                 }
                 sb = new StringBuilder();
 
-                System.out.println("[Topics]: K-Step Markov with priors for " + props.get("sample_size") + "% of resources.");
+                LOGGER.info("[Topics]: K-Step Markov with priors for " + props.get("sample_size") + "% of resources.");
             }
         }
     }
@@ -213,10 +217,10 @@ public class DatasetAnnotationGraphUtils {
                             continue;
                         } else if (temporal_categories.get(category.categoryname) || category_scores.get(category.categoryname) < average) {
                             category_iterator.remove();
-                            System.out.println(entityuri + "\t" + category.categoryname + "\tScore[" + category_scores.get(category.categoryname) + "]\t Avg[" + average + "]\t removed");
+                            LOGGER.info(entityuri + "\t" + category.categoryname + "\tScore[" + category_scores.get(category.categoryname) + "]\t Avg[" + average + "]\t removed");
                         } else if (isContainedCategoryTree(category, main_category.children.iterator())) {
                             category_iterator.remove();
-                            System.out.println(entityuri + "\t" + category.categoryname + "\tScore[" + category_scores.get(category.categoryname) + "]\t Avg[" + average + "]\t removed");
+                            LOGGER.info(entityuri + "\t" + category.categoryname + "\tScore[" + category_scores.get(category.categoryname) + "]\t Avg[" + average + "]\t removed");
                         }
                     }
                 }
@@ -255,7 +259,7 @@ public class DatasetAnnotationGraphUtils {
         }
         ExtractCategoryAnnotations eca = new ExtractCategoryAnnotations();
 
-        System.out.println("Loading category information for entity: " + dbpa.uri);
+	    LOGGER.info("Loading category information for entity: " + dbpa.uri);
         String lang_uri = dbpa.uri.substring(dbpa.uri.indexOf("http://") + "http://".length(), dbpa.uri.indexOf("dbpedia.org"));
         lang_uri = lang_uri.contains(".") ? lang_uri.substring(0, lang_uri.indexOf(".")) : lang_uri;
         lang_uri = lang_uri.isEmpty() ? "en" : lang_uri;
@@ -293,7 +297,7 @@ public class DatasetAnnotationGraphUtils {
             if (dataset == null || FileUtils.fileExists(props.get("raw_graph_dir") + "/Graph_raw_" + dataset.name + ".obj", true)) {
                 continue;
             }
-            System.out.println("Processing dataset: " + dataset.name);
+	        LOGGER.info("Processing dataset: " + dataset.name);
 
             //generate the subgraph of the dataset.
             Map<String, Set<GraphNode>> subdatasetgraph = datasetgraph.get(dataset.name);
