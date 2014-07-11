@@ -206,6 +206,6 @@ Number of iterations used for the ranking of topics with K-Step Markov and PageR
 ranking_iterations=10
 ```
 
-The code and the tool is provided under the creative commons licence (CC). When using the LDP tool please cite the paper in [1]. For additional information, refer to the website: http://data-observatory.org/lod-profiles/about.html.
+The code and the tool is provided under the GNU GENERAL PUBLIC LICENSE. When using the LDP tool please cite the paper in [1]. For additional information, refer to the website: http://data-observatory.org/lod-profiles/about.html.
 
 ######[1] Besnik Fetahu, Stefan Dietze, Bernardo Pereira Nunes, Marco Antonio Casanova, Davide Taibi, Wolfgang Nejdl: A Scalable Approach for Efficiently Generating Structured Dataset Topic Profiles. ESWC 2014: 519-534######
