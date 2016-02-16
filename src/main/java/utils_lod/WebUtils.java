@@ -15,31 +15,40 @@ import java.util.logging.Logger;
 
 
 public class WebUtils {
-	private final static Logger LOGGER = Logger.getLogger(WebUtils.class.getName());
+
+    private final static Logger LOGGER = Logger.getLogger(WebUtils.class.getName());
     public static HttpClient client = new HttpClient();
-    /*
+
+    /**
      * Does the actual call of the Web Service, using a HttpClient which executes the GetMethod.
+     *
+     * @param url webservice url
+     * @return
      */
     public static String request(String url) {
-        Client client1 = Client.create();
-        LOGGER.info(url);
-        
-        WebResource wbres = client1.resource(url);
-        ClientResponse cr = wbres.accept("application/json").get(ClientResponse.class);
-        int status = cr.getStatus();
-        String response = cr.getEntity(String.class);
-        
-        if(status == 200)
-            return response;
-        
+        WebResource resource = Client.create().resource(url);
+        ClientResponse response = resource.accept("application/json").get(ClientResponse.class);
+
+        if (response.getStatus() == 200) {
+            return response.getEntity(String.class);
+        }
+
         return "";
     }
 
-    public static String post(String url, List<Map.Entry<String, String>> urlParameters)  {
-        try{
+    /**
+     * Make a post request (with parameters) to a given url
+     *
+     * @param url
+     * @param urlParameters
+     * @return
+     */
+    public static String post(String url, List<Map.Entry<String, String>> urlParameters) {
+        try {
             PostMethod method = new PostMethod(url);
+
             // add header
-            for(Map.Entry<String, String> name_val:urlParameters){
+            for (Map.Entry<String, String> name_val : urlParameters) {
                 method.addParameter(name_val.getKey(), name_val.getValue());
             }
 
@@ -47,10 +56,10 @@ public class WebUtils {
             method.addRequestHeader(new Header("Accept", "application/json"));
             method.addRequestHeader(new Header("content-type", "application/x-www-form-urlencoded"));
 
-            int response = client.executeMethod(method);
-            if (response != HttpStatus.SC_OK) {
+            if (client.executeMethod(method) != HttpStatus.SC_OK) {
                 LOGGER.warning("Method failed: " + method.getStatusText());
             }
+
             // Read the response body.
             byte[] responseBody = method.getResponseBody();
 
@@ -60,10 +69,10 @@ public class WebUtils {
             LOGGER.info(response_str);
 
             return response_str;
-        }
-        catch(Exception e){
+        } catch (Exception e) {
             LOGGER.log(Level.SEVERE, e.getMessage(), e);
         }
+
         return "";
     }
 }
