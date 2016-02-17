@@ -1,7 +1,3 @@
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
 package topic_ranking;
 
 import entities.metadata.CategoryAnnotation;
@@ -12,7 +8,6 @@ import java.util.*;
 import java.util.Map.Entry;
 
 /**
- *
  * @author besnik
  */
 public class AccuracyComputation {
@@ -135,9 +130,9 @@ public class AccuracyComputation {
                 Set<Entry<String, Double>> topic_terms = ldatopics.get(topic);
                 Set<DBPediaAnnotation> topic_annotations = lda_annotations.get(topic);
 
-                if(topic_annotations == null || topic_annotations.isEmpty())
+                if (topic_annotations == null || topic_annotations.isEmpty())
                     continue;
-                
+
                 Map<String, Double> ranked_terms = new TreeMap<String, Double>();
                 for (Entry<String, Double> entry : topic_terms) {
                     ranked_terms.put(entry.getKey(), entry.getValue());

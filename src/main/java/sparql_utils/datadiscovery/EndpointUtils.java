@@ -4,37 +4,36 @@ package sparql_utils.datadiscovery;
 import com.hp.hpl.jena.sparql.lib.org.json.JSONArray;
 import com.hp.hpl.jena.sparql.lib.org.json.JSONObject;
 import entities.linkeddata.Dataset;
-import utils_lod.FileUtils;
 import org.apache.http.HttpResponse;
 import org.apache.http.client.HttpClient;
 import org.apache.http.client.methods.HttpPost;
 import org.apache.http.entity.StringEntity;
 import org.apache.http.impl.client.DefaultHttpClient;
+import utils_lod.FileUtils;
 
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
 import java.util.logging.Logger;
 
 public class EndpointUtils {
 
-	private final static Logger LOGGER = Logger.getLogger(EndpointUtils.class.getName());
+    private final static Logger LOGGER = Logger.getLogger(EndpointUtils.class.getName());
 
     /*
      * Search string for the datasets within the group of linkededucation.
      */
-
     public final static String DATAHUBURL = "http://datahub.io/api/action/group_show";
     public final static String DATAHUBSINGLEURL = "http://datahub.io/api/action/package_show";
-    public final static String DATAHUBPACKAGESEARCH = "http://datahub.io/api/action/package_search";
-    public final static String DATAHUBRESOURCESEARCH = "http://datahub.io/api/action/resource_search";
 
-    /*
-     * Returns the list of datasets within a specific search query from
-     * datahub.io.
+    /**
+     * Returns the list of datasets within a specific search query from datahub.io.
+     *
+     * @param groupid
+     * @param logpath
+     * @param isLogging
+     * @return
      */
     public List<Dataset> loadGroupDatasetInformation(String groupid, String logpath, boolean isLogging) {
         try {
@@ -53,17 +52,17 @@ public class EndpointUtils {
             JSONObject jsobj = new JSONObject(responsestr).getJSONObject("result");
             JSONArray jsarr = jsobj.getJSONArray("packages");
 
-	        LOGGER.info(jsarr.toString());
+            LOGGER.info(jsarr.toString());
 
             for (int i = 0; i < jsarr.length(); i++) {
                 JSONObject jsondataset = jsarr.getJSONObject(i);
-	            LOGGER.info(jsondataset.toString());
+                LOGGER.info(jsondataset.toString());
 
                 Dataset ds = new Dataset();
                 ds.id = jsondataset.getString("id");
                 ds.name = jsondataset.getString("name");
                 ds.notes = jsondataset.getString("notes");
-               // ds.url = jsondataset.getString("url");
+                // ds.url = jsondataset.getString("url");
                 ds.maintainer = jsondataset.getString("maintainer");
                 ds.maintainer_email = jsondataset.getString("maintainer_email");
                 ds.author = jsondataset.getString("author");
@@ -79,7 +78,7 @@ public class EndpointUtils {
                 loadDatasetInformation(ds, ds.name);
                 lst.add(ds);
 
-	            LOGGER.info(i + "\t" + ds.name + " loaded");
+                LOGGER.info(i + "\t" + ds.name + " loaded");
             }
             return lst;
         } catch (Exception e) {
@@ -91,9 +90,11 @@ public class EndpointUtils {
         return null;
     }
 
-    /*
-     * Returns the list of datasets within a specific search query from
-     * datahub.io.
+    /**
+     * Returns the list of datasets within a specific search query from datahub.io.
+     *
+     * @param datasetid
+     * @return
      */
     public Dataset packageSearchSingle(String datasetid) {
         try {
@@ -109,7 +110,7 @@ public class EndpointUtils {
             HttpResponse response = httpclient.execute(post);
             String responsestr = getResponseText(response);
 
-	        LOGGER.info(responsestr);
+            LOGGER.info(responsestr);
 
             JSONObject jsondataset = new JSONObject(responsestr).getJSONObject("result");
 
@@ -121,62 +122,8 @@ public class EndpointUtils {
 
             return ds;
         } catch (Exception e) {
-	        LOGGER.severe("Method[packageSearch]\nError occurred: " + e.getMessage());
+            LOGGER.severe("Method[packageSearch]\nError occurred: " + e.getMessage());
             FileUtils.saveText(e.getLocalizedMessage(), "ResourceUtilsLogging.txt", true);
-        }
-        return null;
-    }
-    /*
-     * Returns the list of datasets within a specific search query from
-     * datahub.io.
-     */
-
-    public List<Dataset> packageSearch(String query, String logpath, boolean isLogging) {
-        try {
-            List<Dataset> lst = new ArrayList<Dataset>();
-
-            HttpPost post = new HttpPost(DATAHUBPACKAGESEARCH);
-            post.setHeader("X-CKAN-API-Key", "bf317334-3107-4a25-9773-b5961ef3500b");
-            StringEntity input = new StringEntity(query);
-            input.setContentType("application/json");
-            post.setEntity(input);
-
-            HttpClient httpclient = new DefaultHttpClient();
-            HttpResponse response = httpclient.execute(post);
-            String responsestr = getResponseText(response);
-
-	        LOGGER.info(responsestr);
-
-            JSONObject jsobj = new JSONObject(responsestr).getJSONObject("result");
-            JSONArray jsarr = jsobj.getJSONArray("results");
-
-            for (int i = 0; i < jsarr.length(); i++) {
-                JSONObject jsondataset = jsarr.getJSONObject(i);
-                Dataset ds = new Dataset();
-                ds.id = jsondataset.getString("id");
-                ds.name = jsondataset.getString("name");
-                ds.notes = jsondataset.getString("notes");
-                ds.url = jsondataset.getString("url");
-                ds.maintainer = jsondataset.getString("maintainer");
-                ds.maintainer_email = jsondataset.getString("maintainer_email");
-                ds.author = jsondataset.getString("author");
-                ds.author_email = jsondataset.getString("author_email");
-                ds.licence_id = jsondataset.getString("license_id");
-                ds.revision_id = jsondataset.getString("revision_id");
-                ds.state = jsondataset.getString("state");
-                ds.title = jsondataset.getString("title");
-                ds.type = jsondataset.getString("type");
-                ds.version = jsondataset.getString("version");
-
-                loadDatasetInformation(ds, ds.name);
-                lst.add(ds);
-            }
-            return lst;
-        } catch (Exception e) {
-            if (isLogging) {
-	            LOGGER.severe("Method[packageSearch]\nError occurred: " + e.getMessage());
-                FileUtils.saveText(e.getLocalizedMessage(), logpath, true);
-            }
         }
         return null;
     }
@@ -219,6 +166,10 @@ public class EndpointUtils {
         }
     }
 
+    /**
+     * @param response
+     * @return
+     */
     private static String getResponseText(HttpResponse response) {
         String body = "";
         try {
@@ -232,23 +183,5 @@ public class EndpointUtils {
         }
 
         return body;
-    }
-
-    /**
-     * Loads the set of datasets previously loaded at a certain path.
-     *
-     * @param path
-     * @return
-     */
-    public List<Dataset> loadDataset(String path) {
-        List<Dataset> lst = new ArrayList<Dataset>();
-
-        Set<String> files = new HashSet<String>();
-        FileUtils.getFilesList(path, files);
-
-        for (String file : files) {
-            lst.add((Dataset) FileUtils.readObject(file));
-        }
-        return lst;
     }
 }

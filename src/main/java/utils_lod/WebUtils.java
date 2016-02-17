@@ -1,8 +1,5 @@
 package utils_lod;
 
-import com.sun.jersey.api.client.Client;
-import com.sun.jersey.api.client.ClientResponse;
-import com.sun.jersey.api.client.WebResource;
 import org.apache.commons.httpclient.Header;
 import org.apache.commons.httpclient.HttpClient;
 import org.apache.commons.httpclient.HttpStatus;
@@ -18,23 +15,6 @@ public class WebUtils {
 
     private final static Logger LOGGER = Logger.getLogger(WebUtils.class.getName());
     public static HttpClient client = new HttpClient();
-
-    /**
-     * Does the actual call of the Web Service, using a HttpClient which executes the GetMethod.
-     *
-     * @param url webservice url
-     * @return
-     */
-    public static String request(String url) {
-        WebResource resource = Client.create().resource(url);
-        ClientResponse response = resource.accept("application/json").get(ClientResponse.class);
-
-        if (response.getStatus() == 200) {
-            return response.getEntity(String.class);
-        }
-
-        return "";
-    }
 
     /**
      * Make a post request (with parameters) to a given url

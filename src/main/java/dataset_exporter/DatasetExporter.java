@@ -1,7 +1,3 @@
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
 package dataset_exporter;
 
 import entities.linkeddata.Dataset;
@@ -21,7 +17,7 @@ import java.util.logging.Logger;
  */
 public class DatasetExporter {
 
-	private final static Logger LOGGER = Logger.getLogger(DatasetExporter.class.getClass().getName());
+    private final static Logger LOGGER = Logger.getLogger(DatasetExporter.class.getClass().getName());
 
     /**
      * Get the JSON representation of the datasets along with their generated
@@ -84,7 +80,7 @@ public class DatasetExporter {
         for (String datasetpath : datasetspath) {
             StringBuilder sb_tmp = new StringBuilder();
 
-	        LOGGER.info("Printing JSON for dataset: " + datasetpath);
+            LOGGER.info("Printing JSON for dataset: " + datasetpath);
             if (counter != 0) {
                 sb_tmp.append(",");
             }
@@ -138,7 +134,7 @@ public class DatasetExporter {
         StringBuilder sb = new StringBuilder();
 
         //load the dataset profile topics.
-	    LOGGER.info(dataset.name);
+        LOGGER.info(dataset.name);
 
         // the entity and resource associations
         Map<String, Set<String>> entity_resources = new TreeMap<String, Set<String>>();
@@ -146,7 +142,7 @@ public class DatasetExporter {
         Map<String, Set<String>> category_entities = new TreeMap<String, Set<String>>();
 
         if (resource_indices != null) {
-	        LOGGER.info("Dataset has sampling indices");
+            LOGGER.info("Dataset has sampling indices");
             for (String resource_uri : resource_indices) {
                 if (resource_uri.contains("dbpedia")) {
                     continue;
@@ -168,7 +164,7 @@ public class DatasetExporter {
                 }
             }
         } else {
-	        LOGGER.info("Dataset does not have sampling indices");
+            LOGGER.info("Dataset does not have sampling indices");
             for (String resource_uri : dataset.resources.keySet()) {
                 if (resource_uri.contains("dbpedia")) {
                     continue;

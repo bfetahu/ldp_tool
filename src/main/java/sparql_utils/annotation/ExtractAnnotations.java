@@ -1,6 +1,5 @@
 package sparql_utils.annotation;
 
-
 import entities.linkeddata.Dataset;
 import entities.linkeddata.Resource;
 import entities.metadata.DBPediaAnnotation;
@@ -13,7 +12,7 @@ import java.util.logging.Logger;
 
 public class ExtractAnnotations {
 
-	private final static Logger LOGGER = Logger.getLogger(ExtractAnnotations.class.getName());
+    private final static Logger LOGGER = Logger.getLogger(ExtractAnnotations.class.getName());
 
     private Map<String, String> props;
     private NERUtils ned;
@@ -41,15 +40,14 @@ public class ExtractAnnotations {
                 continue;
             }
             String resourcecontent = resource.getCompositeDescription(property_lookup, textprops);
-            if(resourcecontent.trim().isEmpty()){
+            if (resourcecontent.trim().isEmpty()) {
                 continue;
             }
 
             Map<String, String> annotations_keys = null;
-            if(props.get("ned_operation").equals("tagme")){
+            if (props.get("ned_operation").equals("tagme")) {
                 annotations_keys = ned.performSimpleTagMeNER(resourcecontent);
-            }
-            else{
+            } else {
                 annotations_keys = ned.performSimpleDBpediaSpotlightNER(resourcecontent);
             }
 
@@ -68,7 +66,7 @@ public class ExtractAnnotations {
                     annotations.put(dbpobj.getAnnotationURI(), dbpobj);
                 }
             }
-	        LOGGER.info("Annotating resource: " + resource.id + " finisehd");
+            LOGGER.info("Annotating resource: " + resource.id + " finisehd");
         }
 
         FileUtils.saveObject(dataset, dataset_path);

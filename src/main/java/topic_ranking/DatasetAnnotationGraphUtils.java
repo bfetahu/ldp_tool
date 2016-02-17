@@ -21,7 +21,7 @@ import java.util.logging.Logger;
  */
 public class DatasetAnnotationGraphUtils {
 
-	private final static Logger LOGGER = Logger.getLogger(DatasetAnnotationGraphUtils.class.getName());
+    private final static Logger LOGGER = Logger.getLogger(DatasetAnnotationGraphUtils.class.getName());
 
     private Map<String, String> props;
 
@@ -55,7 +55,7 @@ public class DatasetAnnotationGraphUtils {
         CategoryGraph cg = new CategoryGraph();
         cg.addDataGraph(datasetgraph);
 
-	    LOGGER.info(" Vertices: " + cg.getVertexCount() + "\t Edges: " + cg.getEdgeCount());
+        LOGGER.info(" Vertices: " + cg.getVertexCount() + "\t Edges: " + cg.getEdgeCount());
         FileUtils.saveObject(cg, props.get("dataset_topic_graph"));
     }
 
@@ -98,7 +98,7 @@ public class DatasetAnnotationGraphUtils {
                 String timestr = "";
                 StringBuilder sb = new StringBuilder();
 
-	            LOGGER.info("[Profiles]: PageRank with priors for " + props.get("sample_size") + "% of resources.");
+                LOGGER.info("[Profiles]: PageRank with priors for " + props.get("sample_size") + "% of resources.");
                 //compute global ranking
                 if (!FileUtils.fileExists(props.get("topic_ranking_objects") + "Global_Ranking_" + ranking_type + "_" + props.get("sampling_type") + "_" + props.get("sample_size") + ".obj", false)) {
                     Map<String, Map<String, Double>> global_weights = cg.computeDatasetPageRankWithPriors(dataset_resources, alpha, ranking_iterations);
@@ -110,9 +110,9 @@ public class DatasetAnnotationGraphUtils {
                 }
 
                 sb = new StringBuilder();
-	            LOGGER.info("[Topics]: PageRank with priors for " + props.get("sample_size") + "% of resources.");
+                LOGGER.info("[Topics]: PageRank with priors for " + props.get("sample_size") + "% of resources.");
             } else if (ranking_type.equals("hits")) {
-	            LOGGER.info("[Dataset]: HITS with priors for " + props.get("sample_size") + "% of resources.");
+                LOGGER.info("[Dataset]: HITS with priors for " + props.get("sample_size") + "% of resources.");
                 //compute global ranking
                 long time = System.nanoTime();
                 String timestr = "";
@@ -128,7 +128,7 @@ public class DatasetAnnotationGraphUtils {
                 }
 
                 sb = new StringBuilder();
-	            LOGGER.info("[Topics]: HITS with priors for " + props.get("sample_size") + "% of resources.");
+                LOGGER.info("[Topics]: HITS with priors for " + props.get("sample_size") + "% of resources.");
             } else if (ranking_type.equals("kstep")) {
                 LOGGER.info("[Dataset]: K-Step Markov with priors for " + props.get("sample_size") + "% of resources.");
                 //compute global ranking
@@ -149,84 +149,6 @@ public class DatasetAnnotationGraphUtils {
                 LOGGER.info("[Topics]: K-Step Markov with priors for " + props.get("sample_size") + "% of resources.");
             }
         }
-    }
-
-
-    /**
-     * Filter out noisy topics and topics that conflict the hierarchy.
-     */
-    public void processAnnotationIndex() {
-        String dbpedia_url_tmp = props.get("dbpedia_endpoint");
-        String[] dbpedia_tmp = dbpedia_url_tmp.split(",");
-        Map<String, String> dbpedia_url = new TreeMap<String, String>();
-        for (String line : dbpedia_tmp) {
-            String[] data = line.split("\t");
-            dbpedia_url.put(data[0].trim(), data[1].trim());
-        }
-
-        Map<String, DBPediaAnnotation> dbpconcepts = (Map<String, DBPediaAnnotation>) FileUtils.readObject(props.get("annotationindex"));
-        boolean load_entity_categories = props.get("load_entity_categories").equals("true");
-        if (load_entity_categories) {
-            long timeout = 1000;
-
-            for (String entity_uri : dbpconcepts.keySet()) {
-                loadEntitiesIndex(dbpedia_url, timeout, dbpconcepts.get(entity_uri), dbpconcepts);
-            }
-            FileUtils.saveObject(dbpconcepts, props.get("annotationindex"));
-        }
-
-        Map<String, Map<String, Double>> entity_category_scores = (Map<String, Map<String, Double>>) FileUtils.readObject(props.get("entity_category_scores"));
-
-        for (String entityuri : dbpconcepts.keySet()) {
-            DBPediaAnnotation dbpconcept = dbpconcepts.get(entityuri);
-            Map<String, Double> category_scores = entity_category_scores.get(entityuri);
-            if (category_scores == null || category_scores.size() == 1) {
-                continue;
-            }
-
-            //check which categories represent temporal aspects i.e. 1950_establishments
-            Map<String, Boolean> temporal_categories = new HashMap<String, Boolean>();
-            for (String category : category_scores.keySet()) {
-                boolean isTemporal = category.matches("[0-9]*\\_") || category.matches("\\_[0-9*]");
-                temporal_categories.put(category, isTemporal);
-            }
-
-            //compute the average score from the non-temporal categories
-            double average = 0;
-            int count = 0;
-            for (String category : category_scores.keySet()) {
-                if (!temporal_categories.get(category)) {
-                    average += category_scores.get(category);
-                    count++;
-                }
-            }
-            average /= count;
-
-            //remove temporal categories and those below the average category score
-            CategoryAnnotation main_category = dbpconcept.category;
-
-            String entity_name = dbpconcept.uri.substring(dbpconcept.uri.lastIndexOf("/") + 1);
-            if (main_category != null && main_category.children != null && !main_category.children.isEmpty()) {
-                Iterator<CategoryAnnotation> category_iterator = main_category.children.iterator();
-                while (category_iterator.hasNext()) {
-                    CategoryAnnotation category = category_iterator.next();
-                    String category_name = category.categoryname.substring(category.categoryname.lastIndexOf(":") + 1);
-
-                    if (category_scores.get(category.categoryname) != null) {
-                        if (category_name.equals(entity_name)) {
-                            continue;
-                        } else if (temporal_categories.get(category.categoryname) || category_scores.get(category.categoryname) < average) {
-                            category_iterator.remove();
-                            LOGGER.info(entityuri + "\t" + category.categoryname + "\tScore[" + category_scores.get(category.categoryname) + "]\t Avg[" + average + "]\t removed");
-                        } else if (isContainedCategoryTree(category, main_category.children.iterator())) {
-                            category_iterator.remove();
-                            LOGGER.info(entityuri + "\t" + category.categoryname + "\tScore[" + category_scores.get(category.categoryname) + "]\t Avg[" + average + "]\t removed");
-                        }
-                    }
-                }
-            }
-        }
-        FileUtils.saveObject(dbpconcepts, props.get("annotationindex") + "_filtered");
     }
 
     /**
@@ -259,7 +181,7 @@ public class DatasetAnnotationGraphUtils {
         }
         ExtractCategoryAnnotations eca = new ExtractCategoryAnnotations();
 
-	    LOGGER.info("Loading category information for entity: " + dbpa.uri);
+        LOGGER.info("Loading category information for entity: " + dbpa.uri);
         String lang_uri = dbpa.uri.substring(dbpa.uri.indexOf("http://") + "http://".length(), dbpa.uri.indexOf("dbpedia.org"));
         lang_uri = lang_uri.contains(".") ? lang_uri.substring(0, lang_uri.indexOf(".")) : lang_uri;
         lang_uri = lang_uri.isEmpty() ? "en" : lang_uri;
@@ -297,7 +219,7 @@ public class DatasetAnnotationGraphUtils {
             if (dataset == null || FileUtils.fileExists(props.get("raw_graph_dir") + "/Graph_raw_" + dataset.name + ".obj", true)) {
                 continue;
             }
-	        LOGGER.info("Processing dataset: " + dataset.name);
+            LOGGER.info("Processing dataset: " + dataset.name);
 
             //generate the subgraph of the dataset.
             Map<String, Set<GraphNode>> subdatasetgraph = datasetgraph.get(dataset.name);
@@ -319,17 +241,18 @@ public class DatasetAnnotationGraphUtils {
 
     /**
      * Returns the mean normalised topic relevance score, used for filtering out noisy topics.
+     *
      * @param normalised_category_scores
      * @return
      */
-    private double getMeanTopicNormalisedScore(Map<String, Map<String, Entry<Double, Double>>> normalised_category_scores){
+    private double getMeanTopicNormalisedScore(Map<String, Map<String, Entry<Double, Double>>> normalised_category_scores) {
         double avg = 0;
         int count = 0;
-        for(String category:normalised_category_scores.keySet()){
-            for(String dataset:normalised_category_scores.get(category).keySet()){
-                Entry<Double,Double> category_entry = normalised_category_scores.get(category).get(dataset);
+        for (String category : normalised_category_scores.keySet()) {
+            for (String dataset : normalised_category_scores.get(category).keySet()) {
+                Entry<Double, Double> category_entry = normalised_category_scores.get(category).get(dataset);
                 avg += (category_entry.getKey() + category_entry.getValue());
-                count ++;
+                count++;
             }
         }
         return avg / count;
@@ -415,7 +338,7 @@ public class DatasetAnnotationGraphUtils {
         Map<String, Entry<Double, Double>> category_score = normalised_category_scores.get(cat.categoryname);
         if (category_score != null && category_score.containsKey(dataset_name)) {
             double cat_ntr = category_score.get(dataset_name).getKey() + category_score.get(dataset_name).getValue();
-            if(cat_ntr > mean_ntr){
+            if (cat_ntr > mean_ntr) {
                 return;
             }
         }
@@ -440,28 +363,5 @@ public class DatasetAnnotationGraphUtils {
                 addChildCategoriesToGraph(resourceuri, catchild, subdatasetgraph, dataset_name, nodes, normalised_category_scores, mean_ntr);
             }
         }
-    }
-
-    /**
-     * Checks if a category is contained within the category tree of another
-     * category.
-     *
-     * @param category
-     * @param categories
-     * @return
-     */
-    private static boolean isContainedCategoryTree(CategoryAnnotation category, Iterator<CategoryAnnotation> categories) {
-        while (categories.hasNext()) {
-            CategoryAnnotation category_cmp = categories.next();
-            if (category_cmp.categoryname.equals(category.categoryname)) {
-                continue;
-            }
-
-            if (category_cmp.containsChild(category.categoryname)) {
-                return true;
-            }
-        }
-
-        return false;
     }
 }

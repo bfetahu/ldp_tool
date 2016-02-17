@@ -1,7 +1,3 @@
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
 package topic_ranking;
 
 import entities.linkeddata.Dataset;
@@ -15,12 +11,11 @@ import java.util.Map.Entry;
 import java.util.logging.Logger;
 
 /**
- *
  * @author besnik
  */
 public class NormalisationScore {
 
-	private final static Logger LOGGER = Logger.getLogger(NormalisationScore.class.getName());
+    private final static Logger LOGGER = Logger.getLogger(NormalisationScore.class.getName());
 
     /**
      * Compute normalised score using the following formula: score(t,D) =
@@ -66,8 +61,8 @@ public class NormalisationScore {
                 if (cat_entities != null && sub_dataset_entities != null) {
                     double topic_significance = cat_entities.size() / (double) total_category_entities.get(category_uri);
                     double dataset_normalisation = total_entities / sub_dataset_entities.size();
-                        
-                    double score =  topic_significance + dataset_normalisation;
+
+                    double score = topic_significance + dataset_normalisation;
                     Entry<Double, Double> cat_entry = new AbstractMap.SimpleEntry<Double, Double>(topic_significance, score);
                     category_scores.put(datasetname, cat_entry);
                 }
@@ -93,7 +88,7 @@ public class NormalisationScore {
                 continue;
             }
 
-	        LOGGER.info("Processing dataset: " + dataset.name);
+            LOGGER.info("Processing dataset: " + dataset.name);
 
             //store the set of entities associated with a dataset.
             Set<String> sub_dataset_entities = dataset_entities.get(dataset.name);
@@ -130,7 +125,7 @@ public class NormalisationScore {
                         Set<String> dataset_entity_category_support = sub_category_entity.get(dataset.name);
                         dataset_entity_category_support = dataset_entity_category_support == null ? new HashSet<String>() : dataset_entity_category_support;
                         sub_category_entity.put(dataset.name, dataset_entity_category_support);
-                        
+
                         dataset_entity_category_support.add(dbp_concept.uri);
 
                         //add the corresponding child categories as well.
