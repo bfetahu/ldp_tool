@@ -1,6 +1,5 @@
 package sparql_utils.datadiscovery;
 
-
 import com.hp.hpl.jena.sparql.lib.org.json.JSONArray;
 import com.hp.hpl.jena.sparql.lib.org.json.JSONObject;
 import entities.linkeddata.Dataset;
